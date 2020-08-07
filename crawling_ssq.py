@@ -2,7 +2,7 @@
 # author: kuangdd
 # date: 2020/8/7
 """
-hi_ssq
+crawling_ssq
 """
 from pathlib import Path
 import logging
