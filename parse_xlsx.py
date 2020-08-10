@@ -10,17 +10,8 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(Path(__name__).stem)
 
-import os
-import re
-import json
-import shutil
 import collections as clt
-from functools import partial
-from multiprocessing.pool import Pool
-
 import numpy as np
-from tqdm import tqdm
-from matplotlib import pyplot as plt
 
 import openpyxl
 import datetime
@@ -51,6 +42,11 @@ def parse_lottery_ticket(xlsx_path="data/lottery_ticket.xlsx", lottery_type="ssq
         if date_cur >= date2 and end_idx == -1:
             end_idx = num + 2
             break
+    else:
+        if start_idx == -1:
+            start_idx = 2
+        if end_idx == -1:
+            end_idx = num + 2
 
     data = []
     for rows in list(worksheet.rows)[start_idx:end_idx + 1]:
