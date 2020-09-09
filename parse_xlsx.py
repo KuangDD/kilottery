@@ -3,6 +3,8 @@
 # date: 2020/8/7
 """
 parse_xlsx
+
+解析Excel表格。
 """
 from pathlib import Path
 import logging

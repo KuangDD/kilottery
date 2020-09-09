@@ -3,7 +3,9 @@
 # date: 2020/8/10
 """
 play_3d
-模拟开奖
+
+模拟3D开奖。
+
 1. 单次开奖
     * 单注成本
     * 中奖规则
@@ -31,6 +33,9 @@ import numpy as np
 from tqdm import tqdm
 from matplotlib import pyplot as plt
 
+from sklearn.linear_model.logistic import LogisticRegression
+from sklearn.metrics import accuracy_score
+
 from parse_xlsx import parse_lottery_ticket
 
 # data_3d = parse_lottery_ticket(lottery_type='3d', number_of_numbers=3)
@@ -39,6 +44,8 @@ data_3d = np.loadtxt('data/data_3d.txt', dtype=int)
 
 
 class Match3D():
+    """核对中奖情况，包括投注金额、中奖金额和中奖方法。"""
+
     def __init__(self):
         pass
 
@@ -63,17 +70,21 @@ class Match3D():
         return out
 
 
-from sklearn.linear_model.logistic import LogisticRegression
-from sklearn.metrics import accuracy_score
-
-
 class Predict3D():
+    """预测彩票号码。"""
+
     def __init__(self):
         self.data = np.loadtxt('data/data_3d.txt', dtype=int)
+        self.model = None
 
     def predict(self, index):
-        return self.data[index]
+        # return self.data[index]
         # return np.random.choice(list(range(10)), 3, replace=False)
+        if self.model is None:
+            self.method()
+
+        y_pred = self.model.predict([self.data.T[num][index - 10: index] for num in range(3)])
+        return y_pred
 
     def split(self):
         X, y = [], []
@@ -88,10 +99,13 @@ class Predict3D():
         X, y = self.split()
         lr.fit(X, y)
         y_pred = lr.predict(X)
-        print(accuracy_score(y, y_pred))
+        print('Train data accuracy:', accuracy_score(y, y_pred))
+        self.model = lr
 
 
 class Target3D():
+    """实际开奖号码。"""
+
     def __init__(self):
         self.data = np.loadtxt('data/data_3d.txt', dtype=int)
 
@@ -100,6 +114,7 @@ class Target3D():
 
 
 class BetHandler():
+    """投注操作方法。"""
 
     def __init__(self, match_class, predict_class, target_class):
         self.match_class = match_class
@@ -119,5 +134,4 @@ class BetHandler():
 if __name__ == "__main__":
     print(__file__)
     bet_handler = BetHandler(match_class=Match3D(), predict_class=Predict3D(), target_class=Target3D())
-    print(bet_handler.bet_many(range(100)))
-    bet_handler.predict_class.method()
+    print('Earn:', bet_handler.bet_many(range(20, 100)))

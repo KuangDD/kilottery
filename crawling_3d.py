@@ -2,7 +2,9 @@
 # author: kuangdd
 # date: 2020/8/7
 """
-crawling_ssq
+crawling_3d
+
+爬取3D开奖数据。
 """
 from pathlib import Path
 import logging

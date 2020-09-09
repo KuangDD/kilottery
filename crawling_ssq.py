@@ -3,6 +3,8 @@
 # date: 2020/8/7
 """
 crawling_ssq
+
+爬取双色球开奖数据。
 """
 from pathlib import Path
 import logging
